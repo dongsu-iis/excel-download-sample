@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script type="text/javascript">
+    function excel() {
+    $.ajax({
+    cache: false,
+    type: "GET",
+    data: { input: "テストシート" },
+    contentType: "application/json; charset=utf-8",
+    // まずはファイル生成
+    url: '@Url.Action("ExportExcel","Home")'
+    })
+    .then(
+    // 生成したファイルをダウンロード
+    function (res) {
+    window.location = '/Home/Download?filename=' + res.fileName;
+    }
+    );
+
+    }
+</script>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <button onclick="excel()">download excel</button>
+</div>
