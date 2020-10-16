@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using ClosedXML.Excel;
 using excel_download_sample.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,9 @@ namespace excel_download_sample.Controllers
             using XLWorkbook wb = new XLWorkbook();
             var sheet = wb.Worksheets.Add(input);
             wb.SaveAs(filePath);
+
+            // ローディングテキスト表示テストのため5秒待機
+            Thread.Sleep(5000);
 
             // ファイル名だけ返す
             return Json(new ExcelContent

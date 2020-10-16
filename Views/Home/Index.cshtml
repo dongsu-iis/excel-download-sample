@@ -1,30 +1,36 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
 
 <script type="text/javascript">
-    function excel() {
-    $.ajax({
-    cache: false,
-    type: "GET",
-    data: { input: "テストシート" },
-    contentType: "application/json; charset=utf-8",
-    // まずはファイル生成
-    url: '@Url.Action("ExportExcel","Home")'
-    })
-    .then(
-    // 生成したファイルをダウンロード
-    function (res) {
-    window.location = '/Home/Download?filename=' + res.fileName;
-    }
-    );
 
-    }
+  function onExcelDownloadClick() {
+  $.ajax({
+  type: "GET",
+  data: { input: "テストシート" },
+  contentType: "application/json; charset=utf-8",
+  // まずはファイル生成
+  url: '@Url.Action("ExportExcel","Home")',
+  beforeSend: function () { startLoad(); },
+  success: function (res) { window.location = '/Home/Download?filename=' + res.fileName; },
+  complete: function () { endLoad(); }
+  });
+  }
+
+  function startLoad() {
+  $("#btnExcel").text("ダウンロード中…");
+  $("#btnExcel").attr('disabled', true);
+  }
+
+  function endLoad() {
+  $("#btnExcel").text("download excel");
+  $("#btnExcel").attr('disabled', false);
+  }
 </script>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  <h1 class="display-4">Welcome</h1>
+  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    <button onclick="excel()">download excel</button>
+  <button id="btnExcel" onclick="onExcelDownloadClick()">download excel</button>
 </div>
